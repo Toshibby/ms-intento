@@ -1,0 +1,42 @@
+server:
+  port: 9090
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka
+  instance:
+    hostname: localhost
+
+
+spring:
+  application:
+    name: ms-gateway
+
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          routes:
+            - id: ms-intento-libro
+              uri: lb://ms-intento-libro
+              predicates:
+                - Path=/libros/**
+
+
+            - id: ms-intento-usuario
+              uri: lb://ms-intento-usuario
+              predicates:
+                - Path=/usuarios/**
+
+
+            - id: ms-intento-prestamo
+              uri: lb://ms-intento-prestamo
+              predicates:
+                - Path=/prestamos/**
